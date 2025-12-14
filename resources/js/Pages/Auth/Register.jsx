@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
-import { ChevronLeft, Eye, EyeOff, Calendar, Instagram, Facebook, Twitter, MessageCircle, Video, User, Plus, Search } from 'lucide-react';
+import { 
+    ChevronLeft, Eye, EyeOff, Calendar, Instagram, Facebook, Twitter, MessageCircle, Video, User, Plus, Search, 
+    Home, Send, Bell, Check, Settings 
+} from 'lucide-react';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 
@@ -61,6 +64,33 @@ export default function Register() {
     // RETROCEDER
     const prevStep = () => {
         setCurrentStep(prev => prev - 1);
+    };
+
+    const scrollRef = useRef(null);
+    const [isDragging, setIsDragging] = useState(false);
+    const [startX, setStartX] = useState(0);
+    const [scrollLeftState, setScrollLeftState] = useState(0);
+
+    const handleMouseDown = (e) => {
+        setIsDragging(true);
+        setStartX(e.pageX - scrollRef.current.offsetLeft);
+        setScrollLeftState(scrollRef.current.scrollLeft);
+    };
+
+    const handleMouseLeave = () => {
+        setIsDragging(false);
+    };
+
+    const handleMouseUp = () => {
+        setIsDragging(false);
+    };
+
+    const handleMouseMove = (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        const x = e.pageX - scrollRef.current.offsetLeft;
+        const walk = (x - startX) * 2; // La velocidad del scroll (x2)
+        scrollRef.current.scrollLeft = scrollLeftState - walk;
     };
 
     // --- RENDERIZADO DE PASOS ---
@@ -691,6 +721,127 @@ export default function Register() {
         </div>
     );
 
+    const renderStep14_Preview = () => (
+        <div className="flex-grow w-full flex justify-center bg-black animate-fade-in min-h-screen">
+            
+            {/* Estilo para ocultar scrollbar nativo */}
+            <style>{`
+                .hide-scrollbar::-webkit-scrollbar { display: none; }
+                .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+            `}</style>
+
+            <div className="w-full max-w-md flex flex-col relative pb-24">
+                
+                {/* Header */}
+                <div className="flex justify-between items-center px-4 py-4 mt-2">
+                    <div className="w-10 h-10 rounded-full border border-gray-600 flex items-center justify-center overflow-hidden">
+                        {photoPreview ? (
+                            <img src={photoPreview} className="w-full h-full object-cover" />
+                        ) : (
+                            <User size={20} className="text-white" />
+                        )}
+                    </div>
+                    <div className="bg-[#1A1A1A] px-4 py-1 rounded-md text-white font-bold text-sm">
+                        $0
+                    </div>
+                </div>
+
+                {/* TABS CON DRAG-TO-SCROLL */}
+                <div 
+                    ref={scrollRef}
+                    className="flex space-x-2 px-4 overflow-x-auto hide-scrollbar mb-6 cursor-grab active:cursor-grabbing select-none"
+                    onMouseDown={handleMouseDown}
+                    onMouseLeave={handleMouseLeave}
+                    onMouseUp={handleMouseUp}
+                    onMouseMove={handleMouseMove}
+                >
+                    {['Explorer', 'Mis Suscripciones', 'Trends', 'Marcadores'].map((tab, i) => (
+                        <button 
+                            key={i} 
+                            // pointer-events-none en el hijo evita conflictos al arrastrar, pero si necesitas click, quítalo.
+                            // Para tabs simples, esto funciona bien.
+                            className={`px-4 py-2 rounded-xl text-sm whitespace-nowrap border flex-shrink-0 ${i === 1 ? 'border-gray-600 text-white bg-[#1A1A1A]' : 'border-gray-800 text-gray-500'}`}
+                        >
+                            {tab}
+                        </button>
+                    ))}
+                </div>
+
+                {/* Perfil Info */}
+                <div className="flex flex-col items-center text-center mt-2">
+                    <div className="relative">
+                        <div className="w-28 h-28 rounded-full p-1 bg-gradient-to-tr from-[#FF004C] to-[#FF004C]">
+                            <img 
+                                src={photoPreview || "https://via.placeholder.com/150"} 
+                                alt="Profile" 
+                                className="w-full h-full rounded-full object-cover border-4 border-black pointer-events-none" // pointer-events-none evita arrastrar la imagen fantasma
+                            />
+                        </div>
+                        <div className="absolute bottom-0 right-0 bg-[#FF004C] p-1.5 rounded-full border-4 border-black">
+                            <Plus size={16} className="text-white" strokeWidth={4} />
+                        </div>
+                    </div>
+
+                    <div className="flex items-center mt-3 gap-1 justify-center">
+                        <h1 className="text-2xl text-white">{data.name || "Tu Nombre"}</h1>
+                        <div className="bg-[#FF004C] rounded-full p-0.5">
+                            <Check size={10} className="text-white" strokeWidth={4} />
+                        </div>
+                    </div>
+                    <p className="text-gray-500 text-sm">@{data.username || "usuario"}</p>
+                </div>
+
+                {/* Estadísticas */}
+                <div className="flex justify-around mt-8 px-4 text-center">
+                    <div>
+                        <p className="text-gray-400 text-xs mb-1">Ganancias Netas</p>
+                        <p className="text-[#00FF88] text-3xl font-bold">300$</p>
+                    </div>
+                    <div>
+                        <p className="text-gray-400 text-xs mb-1">Suscripciones</p>
+                        <p className="text-white text-3xl font-bold">1K</p>
+                    </div>
+                    <div>
+                        <p className="text-gray-400 text-xs mb-1">Propinas</p>
+                        <p className="text-white text-3xl font-bold">189$</p>
+                    </div>
+                </div>
+
+                {/* Gráfica */}
+                <div className="mt-8 px-4 mb-24">
+                    <div className="flex justify-between items-center mb-4">
+                        <h3 className="font-bold text-white">Ganancias</h3>
+                        <div className="bg-white text-black text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
+                            Por mes <ChevronLeft size={12} className="-rotate-90" />
+                        </div>
+                    </div>
+
+                    <div className="flex items-end justify-between h-32 gap-2">
+                        {[30, 50, 80, 20, 60, 45, 100].map((h, i) => (
+                             <div key={i} className="flex flex-col items-center flex-1 gap-2 group">
+                                {i === 6 && <div className="text-white bg-[#1A5C3A] p-1 rounded-full mb-1 shadow-lg animate-bounce"><Settings size={10} className="text-[#00FF88]" /></div>}
+                                <div 
+                                    className={`w-full rounded-t-lg transition-all ${i === 6 ? 'bg-[#1A5C3A]' : 'bg-[#FF004C]'}`} 
+                                    style={{ height: `${h}%` }}
+                                ></div>
+                                <span className="text-gray-500 text-[10px]">{['L','K','M','J','V','S','D'][i]}</span>
+                             </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Bottom Nav */}
+                <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-black/90 backdrop-blur-md border-t border-gray-800 flex justify-around py-4 pb-6 z-10">
+                    <Home size={24} className="text-white" />
+                    <Search size={24} className="text-gray-500" />
+                    <Plus size={28} className="text-white" />
+                    <Send size={24} className="text-gray-500" />
+                    <Bell size={24} className="text-gray-500" />
+                </div>
+            </div>
+        </div>
+    );
+
     return (
         <div className="min-h-screen bg-black text-white flex flex-col justify-between p-6">
             <Head title="Registro" />
@@ -728,6 +879,7 @@ export default function Register() {
             {currentStep === 11 && renderStep11_Description()}
             {currentStep === 12 && renderStep12_BlockCountries()}
             {currentStep === 13 && renderStep13_Username()}
+            {currentStep === 14 && renderStep14_Preview()}
 
 
 
