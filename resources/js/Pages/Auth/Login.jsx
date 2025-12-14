@@ -129,7 +129,6 @@ export default function Login({ status, canResetPassword }) {
                 </form>
 
                 <div className="flex justify-center gap-4 mt-6">
-                    {/* Reemplaza 'mastercard.svg' y 'visa.svg' por el nombre real de tus archivos */}
                     <img src="images/mc.png" alt="MasterCard SecureCode" className="h-6 opacity-80" />
                     <img src="images/visa.png" alt="Verified by Visa" className="h-6 opacity-80" />
                 </div>
