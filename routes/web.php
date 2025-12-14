@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\OnboardingController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -23,5 +24,14 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    // RUTAS DEL ONBOARDING (KYC)
+    Route::get('/onboarding/welcome', [OnboardingController::class, 'welcome'])->name('onboarding.welcome');
+    Route::get('/onboarding/profile', [OnboardingController::class, 'profile'])->name('onboarding.profile');
+    Route::get('/onboarding/complete', [OnboardingController::class, 'complete'])->name('onboarding.complete');
+});
+
 
 require __DIR__.'/auth.php';
