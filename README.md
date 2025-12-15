@@ -1,59 +1,124 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Onboarding Flow Challenge
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This repository contains the implementation of a dynamic **14-step onboarding flow**, developed as a technical challenge. The project replicates the provided Figma design with high fidelity using **Laravel Breeze**, **React**, and **Inertia.js**.
 
-## About Laravel
+The goal was to replace the default registration page with a complete, multi-step wizard experience that culminates in a Dashboard Preview.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Technologies Stack
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Frontend:** React, Tailwind CSS, Lucide React (Iconography).
+- **Backend:** Laravel 10+, Laravel Breeze, Inertia.js.
+- **State Management:** React Hooks (`useState`, `useRef`, `useEffect`).
+- **Design System:** Custom Dark Mode with Neon Pink (`#FF004C`) accents.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🛠️ Installation & Setup
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Follow these steps to set up the project locally.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Prerequisites
+- PHP 8.1 or higher
+- Composer
+- Node.js & NPM
+- MySQL
 
-## Laravel Sponsors
+### 1. Clone the repository
+```powershell
+git clone "https://github.com/Nachzzz/pruebaTecnica.git"
+```
+```powershell
+cd pruebaTecnica
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+2. Install Backend Dependencies
+```powershell
+composer install
+```
 
-### Premium Partners
+3. Configure Environment
+```powershell
+cp .env.example .env
+php artisan key:generate
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Note: Make sure to configure your database credentials (DB_DATABASE, DB_USERNAME, etc.) in the .env file.
 
-## Contributing
+4. Install Frontend Dependencies
+```powershell
+npm install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+5. Run Database Migrations
+```powershell
+php artisan migrate
+```
 
-## Code of Conduct
+## ▶️ How to Run
+You need to run both the Laravel backend server and the Vite frontend build process.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Option A: Standard Development Open two separate terminal instances:
 
-## Security Vulnerabilities
+Start Laravel server:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```powershell
+php artisan serve
+```
 
-## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Start Vite server:
+
+```powershell
+npm run dev
+```
+
+
+Option B: Using Laravel Sail (Docker) If you prefer using Docker:
+
+```powershell
+./vendor/bin/sail up -d
+```
+```powershell
+./vendor/bin/sail npm run dev
+```
+
+## 👀 How to View the Onboarding Flow
+The onboarding flow has been integrated directly into the registration route, replacing the default Breeze view.
+
+Open your browser and navigate to:
+
+http://localhost:8000/register
+
+You will be greeted by Step 1 (Select Role) of the new onboarding wizard.
+
+Complete all 14 steps to experience the full flow, including:
+
+Data collection (Role, Info, Categories, Socials).
+
+Profile Photo upload with instant preview.
+
+Final Step: A live preview of the generated Dashboard.
+
+## 🧪 Key Features Implemented
+Multi-Step Wizard: Custom logic to manage state across 14 distinct screens without page reloads.
+
+Custom UI Components:
+
+Accessible Radio Buttons and Toggle Switches styled from scratch to match Figma.
+
+"Neon Pink" active states and Dark Mode styling.
+
+Interactive Dashboard Preview:
+
+Drag-to-Scroll: Implemented custom mouse event logic (useRef) to allow "grab and drag" scrolling on the dashboard tabs (desktop friendly).
+
+Real-time Rendering: The dashboard preview dynamically renders the user's uploaded photo and entered name before account creation.
+
+Input Validation: Real-time logic for limiting category selection (max 3) and form requirements.
+
+## Author
+Salto, Jorge Ignacio | Software Developer
+
+🌐 [Portfolio](https://portfolio-nach.vercel.app)
+
+💼 [LinkedIn](https://www.linkedin.com/in/jorge-ignacio-salto-0b29221bb/)
